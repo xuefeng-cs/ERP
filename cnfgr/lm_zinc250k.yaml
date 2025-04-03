@@ -1,0 +1,50 @@
+data:
+  name: zinc250k
+  rawfilepath: data/250k_rndm_zinc_drugs_clean.smi
+  val_ratio: 0.01
+lm:
+  hidden_size: 64 # 128 as in chemgpt 4.7M
+  attention_dropout: 0.1 # 0.0 as in chemgpt 4.7M
+  embed_dropout: 0.1 # 0.0 as in chemgpt 4.7M
+  resid_dropout: 0.1 # 0.0 as in chemgpt 4.7M
+  summary_first_dropout: 0.1 # 0.1 as in chemgpt 4.7M
+  max_length: 512
+  vocab_size: null
+  eos_token_id: null
+  max_position_embeddings: 512
+trainer:
+  # output_dir: null
+  evaluation_strategy: epoch
+  # eval_steps: 2000 # ineffectual when evaluation_strategy!=steps
+  per_device_train_batch_size: 128
+  per_device_eval_batch_size: 128
+  gradient_accumulation_steps: 1
+  learning_rate: 1e-3
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  num_train_epochs: 128
+  lr_scheduler_type: cosine_with_restarts
+  warmup_ratio: 0.05
+  log_level: info
+  logging_strategy: epoch
+  # logging_steps: 2000 # ineffectual when logging_strategy!=steps
+  save_strategy: epoch
+  # save_steps: 2000 # ineffectual when save_strategy!=steps
+  save_total_limit: 4
+  use_cpu: false
+  seed: 42
+  bf16: false
+  fp16: false
+  tf32: false
+  dataloader_num_workers: 1
+  label_names: ["input_ids"] # nota bene : strangly seeming necessary to evaluate
+  load_best_model_at_end: true
+  metric_for_best_model: eval_loss
+  greater_is_better: false
+  deepspeed: null
+  optim: adamw_torch
+  report_to: tensorboard
+  gradient_checkpointing: false
+  torch_compile: true
+trainercall:
+  resume_from_checkpoint: null
